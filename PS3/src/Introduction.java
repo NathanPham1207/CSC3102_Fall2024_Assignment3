@@ -113,13 +113,17 @@ public class Introduction {
 	
 	public static void increaseWaitDay(int studentNumber, int increase) 
 	{
+		int originalWait = 0;
+		int changedWait = 0;
 		if (socialNetwork.adjList.containsKey(studentNumber)) 
 		{
 			for (SocialNetwork.Edge edge : socialNetwork.adjList.get(studentNumber)) 
 			{
+				originalWait = edge.getWait();
 				edge.setWait(edge.getWait() + increase);
+				changedWait = edge.getWait();
 			}
-			System.out.println("Wait days increased by " + increase + " for student " + studentNumber + ".");
+			System.out.println("Original Wait "+ originalWait+ " changed to "+ changedWait + " for student " + studentNumber + ".");
 		} else 
 		{
 			System.out.println("Student does not exist in the network.");
@@ -128,13 +132,17 @@ public class Introduction {
 	
 	public static void decreaseWaitDay(int studentNumber, int decrease) 
 	{
+		int originalWait = 0;
+		int changedWait = 0;
 		if (socialNetwork.adjList.containsKey(studentNumber)) 
 		{
 			for (SocialNetwork.Edge edge : socialNetwork.adjList.get(studentNumber)) 
 			{
+				originalWait = edge.getWait();
 				edge.setWait(edge.getWait() - decrease);
+				changedWait = edge.getWait();
 			}
-			System.out.println("Wait days decreased by " + decrease + " for student " + studentNumber + ".");
+			System.out.println("Original Wait "+ originalWait+ " changed to "+ changedWait + " for student " + studentNumber + ".");
 		} else 
 		{
 			System.out.println("Student does not exist in the network.");
