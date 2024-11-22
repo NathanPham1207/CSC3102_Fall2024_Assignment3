@@ -158,7 +158,8 @@ public class SocialNetwork {
 	        System.out.println("No path exists from vertex " + start + " to vertex " + end + ".");
 	        return;
 	    }
-	    System.out.println("Shortest distance from vertex " + start + " to vertex " + end + ": " + distances[endIndex]);
+	    System.out.println("Shortest distance from student has enrollment number " + start + 
+	    		" to student has enrollment number " + end + ": " + distances[endIndex]);
 
 	    // Reconstruct and print the path
 	    LinkedList<Integer> path = new LinkedList<>();

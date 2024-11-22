@@ -56,7 +56,7 @@ public class Introduction {
 			String[] nameParts = studentName.split(" ");
 			if (nameParts.length != 2) 
 			{
-				System.out.println("Invalid input.");
+				System.out.println("Invalid input for Name.");
 			} else 
 			{
 				String firstName = nameParts[0];
@@ -68,13 +68,31 @@ public class Introduction {
 					{
 						studentA = vertex.getEnrollmentNum();
 						studentID = Integer.toString(studentA);
-						System.out.println(studentID);
+						System.out.println(studentName+ "'s is "+ studentID+".");
 					}
 				}
 			}
 			
 		}
 		return studentID;
+	}
+	
+	public static String getNameFromID(String input)
+	{
+		String studentName = null;
+		
+		if(isInt(input) == true)
+		{
+			int enrollmentNO = Integer.parseInt(input);
+			for(SocialNetwork.Vertex vertex : vList.values())
+			{
+				if(vertex.getEnrollmentNum() == enrollmentNO)
+				{
+					studentName = vertex.getFirstName().concat(" ").concat(vertex.getLastName());
+				}
+			}
+		}
+		return studentName;
 	}
 	
 	public static void removeEdge(int source, int target) 
@@ -99,45 +117,57 @@ public class Introduction {
 			}
 			if (removed) 
 			{
-				System.out.println("Connection from " + source + " to " + target + " removed.");
+				System.out.println("Connection from student enrollment number" + source + " to student enrollment number" + target + " is removed.");
 			} else 
 			{
-				System.out.println("No connection exists from " + source + " to " + target + ".");
+				System.out.println("No connection exists from student" + source + " to student" + target + ".");
 			}
 		} 
 		else 
 		{
-			System.out.println("Student A does not exist in the network.");
+			System.out.println("Student does not exist in the network.");
 		}
 	}
 	
 	public static void increaseWaitDay(int studentNumber, int increase) 
 	{
+		int originalWait = 0;
+		int changedWait = 0;
+		String input = Integer.toString(studentNumber);
+		String studentName = getNameFromID(input);
 		if (socialNetwork.adjList.containsKey(studentNumber)) 
 		{
 			for (SocialNetwork.Edge edge : socialNetwork.adjList.get(studentNumber)) 
 			{
+				originalWait = edge.getWait();
 				edge.setWait(edge.getWait() + increase);
+				changedWait = edge.getWait();
 			}
-			System.out.println("Wait days increased by " + increase + " for student " + studentNumber + ".");
+			System.out.println("Enrollment Number: " + studentNumber + " - " + studentName+ ": " + "Original Wait "+ originalWait+ " changed to "+ changedWait + ".");
 		} else 
 		{
-			System.out.println("Student does not exist in the network.");
+			System.out.println("Student " + studentName + "does not exist in the network.");
 		}
 	}
 	
 	public static void decreaseWaitDay(int studentNumber, int decrease) 
 	{
+		int originalWait = 0;
+		int changedWait = 0;
+		String input = Integer.toString(studentNumber);
+		String studentName = getNameFromID(input);
 		if (socialNetwork.adjList.containsKey(studentNumber)) 
 		{
 			for (SocialNetwork.Edge edge : socialNetwork.adjList.get(studentNumber)) 
 			{
+				originalWait = edge.getWait();
 				edge.setWait(edge.getWait() - decrease);
+				changedWait = edge.getWait();
 			}
-			System.out.println("Wait days decreased by " + decrease + " for student " + studentNumber + ".");
+			System.out.println("Enrollment Number: " + studentNumber + " - " + studentName+ ": " + "Original Wait "+ originalWait+ " changed to "+ changedWait + ".");
 		} else 
 		{
-			System.out.println("Student does not exist in the network.");
+			System.out.println("Student " + studentName + "does not exist in the network.");
 		}
 	}	
 	
@@ -149,6 +179,7 @@ public class Introduction {
 		String networkSheet = "src\\network.csv";
 		String studentSheet = "src\\students.csv";
 		String var = null;
+		String studentName = null;
 		
 		try 
 		{
@@ -176,8 +207,8 @@ public class Introduction {
 						{
 							System.out.println("Enrollment field have blank value. Please check file students.csv again !!!");
 						}
-						if(!(row2[0].toUpperCase().equals("ENROLLMENT") && row2[1].toUpperCase().equals("FIRSTNAME")
-								&& row2[2].toUpperCase().equals("LASTNAME") && row2[3].toUpperCase().equals("WAIT"))) {
+						if(!(row2[0].toUpperCase().equals("ENROLLMENT") && row2[1].toUpperCase().equals("FIRST NAME")
+								&& row2[2].toUpperCase().equals("LAST NAME") && row2[3].toUpperCase().equals("WAIT"))) {
 	                            System.out.println("Line " + lineNumberStudent + " from students.csv isn't formatted correctly.");
 	                            Thread.sleep(350);
 	                        }
@@ -202,8 +233,7 @@ public class Introduction {
 					int enrollmentNum = Integer.parseInt(row[0]);
 					String firstName = row[1];
 					String lastName = row[2];
-					System.out.println("First Name: " + firstName);
-					System.out.println("Last name: " + lastName);
+					
 					SocialNetwork.Vertex vertex = socialNetwork.new Vertex(enrollmentNum, firstName, lastName);
 					// Putting the vertices in a hashmap based on enrollment number.
 					vList.put(enrollmentNum, vertex);
@@ -225,10 +255,10 @@ public class Introduction {
 						{
 							System.out.println("Enrollment field have blank value. Please check file network.csv again !!!");
 						}
-						if(!(row[0].toUpperCase().equals("ENROLLMENT") && row[1].toUpperCase().equals("FIRSTNAME")
-								&& row[2].toUpperCase().equals("LASTNAME") && row[3].toUpperCase().equals("CONNECTION1")
-								&& row[4].toUpperCase().equals("CONNECTION2")&& row[5].toUpperCase().equals("CONNECTION3")
-								&& row[6].toUpperCase().equals("CONNECTION4")&& row[7].toUpperCase().equals("CONNECTION5"))) {
+						if(!(row[0].toUpperCase().equals("ENROLLMENT") && row[1].toUpperCase().equals("FIRST NAME")
+								&& row[2].toUpperCase().equals("LAST NAME") && row[3].toUpperCase().equals("CONNECTION 1")
+								&& row[4].toUpperCase().equals("CONNECTION 2")&& row[5].toUpperCase().equals("CONNECTION 3")
+								&& row[6].toUpperCase().equals("CONNECTION 4")&& row[7].toUpperCase().equals("CONNECTION 5"))) {
 	                            System.out.println("Line " + lineNumberNetwork + " from network.csv isn't formatted correctly.");
 	                            Thread.sleep(350);
 	                        }
@@ -259,6 +289,8 @@ public class Introduction {
 				e.printStackTrace();
 			}
 		}
+		
+		
 		while (true) 
 		{
 			printStatments();
@@ -286,19 +318,27 @@ public class Introduction {
 
 				if (isInt(inputPerson)) 
 				{
-					int student = Integer.parseInt(inputPerson);
-					if (socialNetwork.adjList.get(student) != null) 
+					int enrollmentNumber = Integer.parseInt(inputPerson);
+					if (socialNetwork.adjList.get(enrollmentNumber) != null) 
 					{
-						System.out.println("\n Student has enrollment number " + student + "'s network: ");
-						for (SocialNetwork.Edge edge : socialNetwork.adjList.get(student)) 
+						studentName = getNameFromID(inputPerson);
+						System.out.println("\n Student has enrollment number " + enrollmentNumber + ".(" + studentName + ")" + "'s network: ");
+						for (SocialNetwork.Edge edge : socialNetwork.adjList.get(enrollmentNumber)) 
 						{
-							System.out.print(edge.getTo() + " -> ");
+							for(SocialNetwork.Vertex vertex: vList.values()) 
+							{
+								if(edge.getTo() == vertex.getEnrollmentNum()) 
+								{
+									System.out.print(edge.getTo()+ ": " + vertex.getFirstName()+ " " + vertex.getLastName() + " -> ");
+								}
+							}
+							
 						}
 						System.out.println();
 					} 
 					else 
 					{
-						System.out.println("The student with enrollment number " + student + " does not exist.");
+						System.out.println("The student with enrollment number " + studentName + " does not exist.");
 					}
 				} 
 				else if (isString(inputPerson)) 
@@ -306,7 +346,7 @@ public class Introduction {
 					String[] nameParts = inputPerson.split(" ");
 					if (nameParts.length < 2) 
 					{
-						System.out.println("Invalid input. Please enter both first and last names.");
+						System.out.println("Invalid input.");
 						break;
 					}
 					String firstName = nameParts[0];
@@ -330,7 +370,13 @@ public class Introduction {
 							{
 								for (SocialNetwork.Edge edge : socialNetwork.adjList.get(vertex.getEnrollmentNum())) 
 								{
-									System.out.print(edge.getTo() + " -> ");
+									for(SocialNetwork.Vertex vertexx: vList.values()) 
+									{
+										if(edge.getTo() == vertexx.getEnrollmentNum()) 
+										{
+											System.out.print(edge.getTo()+ ": " + vertexx.getFirstName()+ " " + vertexx.getLastName() + " -> ");
+										}
+									}
 								}
 								System.out.println();
 							} else 
@@ -359,7 +405,6 @@ public class Introduction {
 				if (isInt(studentID) == true) 
 				{
 					int studentA = Integer.parseInt(studentID);
-					System.out.println("Student A:" + studentA);
 					System.out.println("Student B: ");
 					String studenta = scanner.nextLine();
 					if (isInt(studenta) == true) 
@@ -378,14 +423,18 @@ public class Introduction {
 					int studentA = 0;
 					int studentB1 = 0;
 					String tempStudentA = getIdFromName(studentID);
+					try {
 					studentA = Integer.parseInt(tempStudentA);
+					}catch(Exception e) {}
 					System.out.println("Student B: ");
 					String studentB = scanner.nextLine();
 					System.out.println(studentB);
 					if (isString(studentB) == true) 
 					{
 						String tempStudentB = getIdFromName(studentB);
+						try {
 						studentB1 = Integer.parseInt(tempStudentB);
+						}catch(Exception e) {}
 					}
 					socialNetwork.dijkstra(studentA, studentB1);
 				}
@@ -401,31 +450,41 @@ public class Introduction {
 						
 				if (isInt(source) == true) 
 				{
-					studentA = Integer.parseInt(source);						
+					try {
+					studentA = Integer.parseInt(source);		
+					}catch(Exception e) {}
 					System.out.println("Enter the enrollment number or name of the student B (target): ");
 					String	target2 = scanner.nextLine();
 					if(isInt(target2) == true) 
 					{
+						try {
 						studentB = Integer.parseInt(target2);
+						}catch (Exception e) {}
 						removeEdge(studentA,studentB);
 					} 
 					else if(isString(target2) == true) 
 					{
 
 						String studentB1 = getIdFromName(target2);
+						try {
 						studentB = Integer.parseInt(studentB1);
+						} catch(Exception e) {}
 						removeEdge(studentA, studentB);
 					}			
 				} 
 				else if (isString(source) == true) 
 				{
 					String tempStudentA = getIdFromName(source);
-					studentA = Integer.parseInt(tempStudentA);						
+					try {
+					studentA = Integer.parseInt(tempStudentA);		
+					}catch(Exception e) {}
 					System.out.println("Enter the enrollment number or name of the student B (target): ");
 					String target1 = scanner.nextLine();
 					if(isInt(target1) == true) 
 					{
+						try {
 						studentB = Integer.parseInt(target1);
+						} catch(Exception e) {}
 						removeEdge(studentA, studentB);
 					} 
 					else if(isString(target1) == true) 
@@ -433,7 +492,9 @@ public class Introduction {
 
 						System.out.println(target1);
 						String tempStudentB = getIdFromName(target1);
+						try {
 						studentB = Integer.parseInt(tempStudentB);
+						} catch (Exception e) {}
 						removeEdge(studentA, studentB);
 					}
 				}
@@ -445,13 +506,19 @@ public class Introduction {
 				System.out.println("Enter the enrollment number or name of the student to increase wait days: ");
 				scanner.nextLine();
 				var = scanner.nextLine();
+				
 				while (!validIncreaseInput) 
 				{
 					try 
 					{
 						System.out.println("Enter the number of days to increase (FROM 0 - 100): ");
-						increase = scanner.nextInt();
-						validIncreaseInput = true;
+						
+							increase = scanner.nextInt();
+							validIncreaseInput = true;
+					
+							break;
+							
+						
 					}
 					catch(InputMismatchException e) 
 					{
@@ -461,15 +528,33 @@ public class Introduction {
 				}
 				if (isInt(var) == true) 
 				{
-					int studentNumber = Integer.parseInt(var);
-					increaseWaitDay(studentNumber, increase);
+					int studentNumber = 0;
+					try {
+					 studentNumber = Integer.parseInt(var);
+					}catch(Exception e) {}
+					if(studentNumber <0 || studentNumber<= 100) {
+						increaseWaitDay(studentNumber, increase);
+					}
+					else {
+						System.out.println("Invalid input for number of days.");
+						break;
+					}
 				}
 				else if (isString(var) == true)
 				{
+					int studentNumber = 0;
 					String tempStudent = getIdFromName(var);
-					int studentNumber = Integer.parseInt(tempStudent);
-					increaseWaitDay(studentNumber, increase);
+					try {
+					studentNumber = Integer.parseInt(tempStudent);
+					}catch(Exception e) {}
+					if(studentNumber <0 || studentNumber<= 100) {
+						increaseWaitDay(studentNumber, increase);
+					}else {
+						
+						break;
+					}
 				}
+				
 				break;
 
 			case 5:
@@ -495,14 +580,30 @@ public class Introduction {
 				}
 				if (isInt(var) == true) 
 				{
-					int studentNumber = Integer.parseInt(var);
+					int studentNumber = 0;
+					try {
+					 studentNumber= Integer.parseInt(var);
+					}catch(Exception e) {}
+					if(studentNumber <0 || studentNumber<= 100) {
 					decreaseWaitDay(studentNumber, decrease);
+					}else{
+						System.out.println("Invalid input for number of days.");
+						break;
+					}
 				}
 				else if (isString(var) == true)
 				{
+					int studentNumber = 0;
 					String tempStudent = getIdFromName(var);
-					int studentNumber = Integer.parseInt(tempStudent);
+					try {
+					studentNumber = Integer.parseInt(tempStudent);
+					}catch (Exception e) {}
+					if(studentNumber <0 || studentNumber<= 100) {
 					decreaseWaitDay(studentNumber, decrease);
+					}else{
+						System.out.println("Invalid input for number of days.");
+						break;
+					}
 				}
 				break;
 
